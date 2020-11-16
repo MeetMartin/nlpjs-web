@@ -6,6 +6,7 @@
         const {containerBootstrap, Nlp, LangEn, fs} = window.nlpjs;
 
         function onIntent(nlp, input) {
+            console.log(input);
             if (input.intent === 'greetings.hello') {
                 const hours = new Date().getHours();
                 const output = input;
@@ -47,16 +48,16 @@
         (async () => {
             const nlp = await setupNLP('https://raw.githubusercontent.com/jesus-seijas-sp/nlpjs-examples/master/01.quickstart/02.filecorpus/corpus-en.json');
             const chatForm = document.getElementById('chatbotForm');
-            chatForm.addEventListener('submit', onChatSubmit(nlp))
+            chatForm.addEventListener('submit', onChatSubmit(nlp));
         })();
     </script>
 </head>
 <body>
-    <h1>NLP in a browser</h1>
-    <div id="chat"></div>
-    <form id="chatbotForm">
-        <input type="text" id="chatInput" />
-        <input type="submit" id="chatSubmit" value="send" />
-    </form>
+<h1>NLP in a browser</h1>
+<div id="chat"></div>
+<form id="chatbotForm">
+    <input type="text" id="chatInput" />
+    <input type="submit" id="chatSubmit" value="send" />
+</form>
 </body>
 </html>
