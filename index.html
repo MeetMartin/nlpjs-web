@@ -1,0 +1,62 @@
+<html>
+<head>
+    <title>NLP in a browser</title>
+    <script src='./dist/bundle.js'></script>
+    <script>
+        const {containerBootstrap, Nlp, LangEn, fs} = window.nlpjs;
+
+        function onIntent(nlp, input) {
+            if (input.intent === 'greetings.hello') {
+                const hours = new Date().getHours();
+                const output = input;
+                if(hours < 12) {
+                    output.answer = 'Good morning!';
+                } else if(hours < 17) {
+                    output.answer = 'Good afternoon!';
+                } else {
+                    output.answer = 'Good evening!';
+                }
+                return output;
+            }
+            return input;
+        }
+
+        const setupNLP = async corpus => {
+            const container = containerBootstrap();
+            container.register('fs', fs);
+            container.use(Nlp);
+            container.use(LangEn);
+            const nlp = container.get('nlp');
+            nlp.onIntent = onIntent;
+            nlp.settings.autoSave = false;
+            await nlp.addCorpus(corpus);
+            nlp.train();
+            return nlp;
+        };
+
+        const onChatSubmit = nlp => async event => {
+            event.preventDefault();
+            const chat = document.getElementById('chat');
+            const chatInput = document.getElementById('chatInput');
+            chat.innerHTML = chat.innerHTML + `<p>you: ${chatInput.value}</p>`;
+            const response = await nlp.process('en', chatInput.value);
+            chat.innerHTML = chat.innerHTML + `<p>chatbot: ${response.answer}</p>`;
+            chatInput.value = '';
+        };
+
+        (async () => {
+            const nlp = await setupNLP('https://raw.githubusercontent.com/jesus-seijas-sp/nlpjs-examples/master/01.quickstart/02.filecorpus/corpus-en.json');
+            const chatForm = document.getElementById('chatbotForm');
+            chatForm.addEventListener('submit', onChatSubmit(nlp))
+        })();
+    </script>
+</head>
+<body>
+    <h1>NLP in a browser</h1>
+    <div id="chat"></div>
+    <form id="chatbotForm">
+        <input type="text" id="chatInput" />
+        <input type="submit" id="chatSubmit" value="send" />
+    </form>
+</body>
+</html>

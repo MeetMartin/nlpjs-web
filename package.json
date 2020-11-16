@@ -1,0 +1,20 @@
+{
+  "name": "nlpjs-web",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify ./buildable.js | terser --compress --mangle > ./dist/bundle.js",
+    "maintain": "npm install & npm update && npm audit fix --force"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@nlpjs/core": "^4.14.0",
+    "@nlpjs/lang-en-min": "^4.14.0",
+    "@nlpjs/nlp": "^4.15.0",
+    "@nlpjs/request-rn": "^4.14.3",
+    "browserify": "^17.0.0",
+    "terser": "^5.3.8"
+  }
+}
